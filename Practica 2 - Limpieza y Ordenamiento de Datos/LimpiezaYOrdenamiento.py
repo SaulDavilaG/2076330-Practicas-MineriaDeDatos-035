@@ -1,5 +1,6 @@
 import pandas as pd
 from io import StringIO
+from datetime import datetime
 
 ruta_csv = "../Proyectomineria/recogiendo_tomates.csv"
 
@@ -46,6 +47,26 @@ def renombrar_Columnas(input_file):
     # Actualizamos el archivo en el que se encontraba la información
     df.to_csv("../Proyectomineria/recogiendo_tomates_2.csv", index=False)
 
-#eliminar_registros_con_mal_formato("../Proyectomineria/recogiendo_tomates.csv")
-#ordenar_columnas_depuradas_a_csv("../Proyectomineria/recogiendo_tomates_1.csv")
+def formato_A_Fechas(input_file):
+    # Se carga el archivo CSV
+    df = pd.read_csv(input_file)
+    df['R. Date (Theaters)'] = df['R. Date (Theaters)'].str.replace(' limited','')
+    df['R. Date (Theaters)'] = df['R. Date (Theaters)'].str.replace(' wide','')
+    print(df.head())
+    df['R. Date (Streaming)'] = df['R. Date (Streaming)'].apply(convertir_fecha)
+    df['R. Date (Theaters)'] = df['R. Date (Theaters)'].apply(convertir_fecha)
+    df.to_csv("../Proyectomineria/recogiendo_tomates_2.csv", index=False)
+
+def convertir_fecha(fecha_str):
+    # Convertir la fecha al formato deseado
+    if pd.notna(fecha_str):
+        fecha_str = fecha_str.replace(',', '').strip()
+        return datetime.strptime(fecha_str, '%b%d%Y').date()
+    else:
+        return fecha_str
+
+eliminar_registros_con_mal_formato("../Proyectomineria/recogiendo_tomates.csv")
+ordenar_columnas_depuradas_a_csv("../Proyectomineria/recogiendo_tomates_1.csv")
 renombrar_Columnas("../Proyectomineria/recogiendo_tomates_2.csv")
+formato_A_Fechas("../Proyectomineria/recogiendo_tomates_2.csv")
+
