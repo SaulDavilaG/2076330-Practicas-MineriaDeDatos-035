@@ -68,9 +68,6 @@ def convertir_fecha(fecha_str):
         # Se usa la función strptime() para cambiar la fecha con base en un formato ya establecido por la librería datetime 
         # y solo se extrae la fecha de eso, sin la hora
         return datetime.strptime(fecha_str, '%b%d%Y').date()
-    else:
-        # Si el valor es nulo, se cambia por 'no info'
-        return 'no info'
 
 def formato_A_Horas(input_file):
     # Se carga el archivo CSV
@@ -80,23 +77,23 @@ def formato_A_Horas(input_file):
 
 def funcion_ejemplo(hora):
     if (pd.isna(hora)):
-        return 'no info'
+        return np.nan
     elif 'h' in hora and 'm' in hora:
         partes = hora.split("h")
-        horas = partes[0].zfill(2)
+        horas = int(partes[0])*60
         minutos = partes[1].replace("m","")
-        minutos = minutos.zfill(2)
-        return horas + ":" + minutos
+        duracion = horas+int(minutos)
+        return duracion
     elif 'h' in hora and not 'm' in hora:
         hora = hora.replace('h','')
-        hora = hora.zfill(2)
-        return hora + ":" + '00'
+        duracion = int(hora)*60
+        return duracion
     elif 'm' in hora and not 'h' in hora:
         minutos = hora.replace('m','')
-        minutos = minutos.zfill(2)
-        return '00:' + minutos
+        duracion = int(minutos)
+        return duracion
     else:
-        return '00:00'
+        return 0
     
 def formato_A_Score(input_file):
     # Se carga el archivo CSV
@@ -109,14 +106,9 @@ def formato_A_Score(input_file):
         #Si el valor es no nulo, se le quita el signo de porcentaje
         if pd.notna(columnaTomatometerScore[i]):
             columnaTomatometerScore[i] = columnaTomatometerScore[i][:-1]
-        #Si no, se le agrega 'no info'
-        else:
-            columnaTomatometerScore[i] = 'no info'
         #Lo mismo aquí, pero para el otro array de score
         if pd.notna(columnaAudienceScore[i]):
             columnaAudienceScore[i] = columnaAudienceScore[i][:-1]
-        else:
-            columnaAudienceScore[i] = 'no info'
     df['Tomatometer Score'] = columnaTomatometerScore
     df['Audience Score'] = columnaAudienceScore
     df.to_csv(input_file, index=False)
@@ -160,6 +152,8 @@ def formato_A_Generos(input_file):
     df.to_csv(input_file, index=False)
 
 # Se ejecutan todas las funciones (que crearán y modificarán archivos csv en una ruta específica)
+# Si intentas descargar todo el proyecto, borra los archivos 'recogiendo_tomates_1.csv' y 'recogiendo_tomates_2.csv'
+# para que se vuelvan a crear
 eliminar_registros_con_mal_formato("../Proyectomineria/recogiendo_tomates.csv")
 ordenar_columnas_depuradas_a_csv("../Proyectomineria/recogiendo_tomates_1.csv")
 renombrar_Columnas("../Proyectomineria/recogiendo_tomates_2.csv")
