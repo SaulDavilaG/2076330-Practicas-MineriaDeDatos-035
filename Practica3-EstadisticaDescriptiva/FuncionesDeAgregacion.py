@@ -8,21 +8,16 @@ def promedio_score_por_genero(input_file):
     # y se calcula el promedio de las columnas 'Tomatometer Score' y 'Audience Score'
     df_genero = df.groupby('Genre')[['Tomatometer Score', 'Audience Score']].mean().round(2)
 
-    # Se imprime el dataframe resultante
-    print("\n\nPromedio de puntuaciones por genero y tipo (sobre 100)")
-    print(df_genero)
+    return df_genero
 
 def conteo_peliculas_por_genero(input_file):
     # Aquí se lee el archivo CSV
     df = pd.read_csv(input_file)
 
     # Se agrupan los datos en 'df' por la columna 'Genre'
-    # y se cuentan los registros de las columnas 'Tomatometer Score' y 'Audience Score'
-    df_genero = df.groupby('Genre')[['Tomatometer Score', 'Audience Score']].count()
-
-    # Se imprime el dataframe resultante
-    print("\n\nConteo de puntuaciones por genero y tipo")
-    print(df_genero)
+    # y se cuentan los registros de la columna 'Title'
+    df_genero = df.groupby('Genre').agg({'Title': ['count']})
+    return df_genero
 
 def conteo_peliculas_por_clasificacion(input_file):
     # Aquí se lee el archivo CSV
@@ -32,9 +27,7 @@ def conteo_peliculas_por_clasificacion(input_file):
     # y se cuentan los registros de las columnas 'Titulo'
     conteo_por_clasificacion = df.groupby(['Genre','Rating']).agg({'Title': ['count']})
 
-    # Se imprime el dataframe resultante
-    print("\n\nConteo de puntuaciones por genero y tipo de clasificacion")
-    print(conteo_por_clasificacion.to_string())
+    return conteo_por_clasificacion
 
 def pelicula_mejor_y_peor_puntuada(input_file):
     # Aquí se lee el archivo CSV
@@ -55,6 +48,7 @@ def pelicula_mejor_y_peor_puntuada(input_file):
     print(df.loc[df['Audience Score'].idxmax()])
     print('\n\nPelicula peor puntuada por la audiencia')
     print(df.loc[df['Audience Score'].idxmin()])
+
 
 def pelicula_mas_larga_y_mas_corta(input_file):
     # Aquí se lee el archivo CSV
@@ -122,13 +116,29 @@ def fechas_lanzamiento(input_file):
     print("\n\nPelículas más recientes estrenadas en plataforma:")
     print(pelicula_streaming_Reciente)
 
+if __name__ == "__main__":
+    # Se mandan a llamar a las funciones con base en la direccion en la que están
+    # dentro del equipo. Los datos que regresan se guardan en variables locales y se
+    # imprimen de acuerdo a lo que eso
 
-# Se mandan a llamar a las funciones con base en la direccion en la que están
-# dentro del equipo
-promedio_score_por_genero("../Proyectomineria/recogiendo_tomates_2.csv")
-conteo_peliculas_por_genero("../Proyectomineria/recogiendo_tomates_2.csv")
-#Si molesta mucho la funcion de abajo, solo comentala (es mucho texto)
-conteo_peliculas_por_clasificacion("../Proyectomineria/recogiendo_tomates_2.csv")
-pelicula_mejor_y_peor_puntuada("../Proyectomineria/recogiendo_tomates_2.csv")
-pelicula_mas_larga_y_mas_corta("../Proyectomineria/recogiendo_tomates_2.csv")
-fechas_lanzamiento("../Proyectomineria/recogiendo_tomates_2.csv")
+    df_genero = promedio_score_por_genero("../Proyectomineria/recogiendo_tomates_2.csv")
+    print("\n\nPromedio de puntuaciones por genero y tipo (sobre 100)")
+    print(df_genero)
+
+    df_genero = conteo_peliculas_por_genero("../Proyectomineria/recogiendo_tomates_2.csv")
+    # Se imprime el dataframe resultante
+    print("\n\nConteo de puntuaciones por genero")
+    print(df_genero)
+
+    #Si molesta mucho la funcion de abajo, solo comentala (es mucho texto)
+    conteo_por_clasificacion = conteo_peliculas_por_clasificacion("../Proyectomineria/recogiendo_tomates_2.csv")
+    # Se imprime el dataframe resultante
+    print("\n\nConteo de puntuaciones por genero y tipo de clasificacion")
+    print(conteo_por_clasificacion.to_string())
+
+    pelicula_mejor_y_peor_puntuada("../Proyectomineria/recogiendo_tomates_2.csv")
+
+    pelicula_mas_larga_y_mas_corta("../Proyectomineria/recogiendo_tomates_2.csv")
+
+    fechas_lanzamiento("../Proyectomineria/recogiendo_tomates_2.csv")
+
