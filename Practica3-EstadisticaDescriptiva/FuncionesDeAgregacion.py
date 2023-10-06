@@ -5,8 +5,8 @@ def promedio_score_por_genero(input_file):
     df = pd.read_csv(input_file)
 
     # Se agrupan los datos en 'df' por la columna 'Genre'
-    # y se calcula el promedio de las columnas 'Tomatometer Score' y 'Audience Score'
-    df_genero = df.groupby('Genre')[['Tomatometer Score', 'Audience Score']].mean().round(2)
+    # y se calcula el promedio de las columnas 'TomatometerScore' y 'AudienceScore'
+    df_genero = df.groupby('Genre')[['TomatometerScore', 'AudienceScore']].mean().round(2)
 
     return df_genero
 
@@ -36,18 +36,18 @@ def pelicula_mejor_y_peor_puntuada(input_file):
 
     # Aquí se busca mediante la función idxmax() el índice de la pelicula que tiene el menor score,
     # se busca con la función .loc('Aqui pasamos el indice') y se imprime 
-    print(df.loc[df['Tomatometer Score'].idxmax()])
+    print(df.loc[df['TomatometerScore'].idxmax()])
     print('\n\nPelicula peor puntuada por las criticas')
 
     # Se hace el mismo proceso de arriba, solo que se cambia .idxmax() por .idxmin()
-    print(df.loc[df['Tomatometer Score'].idxmin()])
+    print(df.loc[df['TomatometerScore'].idxmin()])
     print('\n\nPelicula mejor puntuada por la audiencia')
 
-    # Los siguientes dos pasos son los dos mismos pasos de arriba, solo que se cambia 'Tomatometer Score' 
-    # por 'Audience Score'
-    print(df.loc[df['Audience Score'].idxmax()])
+    # Los siguientes dos pasos son los dos mismos pasos de arriba, solo que se cambia 'TomatometerScore' 
+    # por 'AudienceScore'
+    print(df.loc[df['AudienceScore'].idxmax()])
     print('\n\nPelicula peor puntuada por la audiencia')
-    print(df.loc[df['Audience Score'].idxmin()])
+    print(df.loc[df['AudienceScore'].idxmin()])
 
 
 def pelicula_mas_larga_y_mas_corta(input_file):
@@ -82,8 +82,8 @@ def fechas_lanzamiento(input_file):
     df = df[df['Title'] != 'Bunt. Delo Litvinenko (Poisoned By Polonium: The Litvinenko File) (Rebellion: The Litvinenko Case)']
 
     # Las fechas que aparecen en la columna 'R. Date (Theaters)' se acomodan a un formato fecha
-    df['R. Date (Theaters)'] = pd.to_datetime(df['R. Date (Theaters)'], format= '%d/%m/%Y')
-    df['R. Date (Streaming)'] = pd.to_datetime(df['R. Date (Streaming)'], format= '%d/%m/%Y')
+    df['R. Date (Theaters)'] = pd.to_datetime(df['R. Date (Theaters)'], format= '%Y-%m-%d')
+    df['R. Date (Streaming)'] = pd.to_datetime(df['R. Date (Streaming)'], format= '%Y-%m-%d')
 
     # Se utilizan funciones de agregacion en la columna 'R. Date (Theaters)' 
     # para obtener la fecha más antigua y reciente dicha columna 

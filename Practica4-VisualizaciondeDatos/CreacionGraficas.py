@@ -1,9 +1,9 @@
 import pandas as pd
+import os 
 import matplotlib.pyplot as plt
 import sys
 sys.path.append('../Proyectomineria/Practica3-EstadisticaDescriptiva/')
 import FuncionesDeAgregacion
-
 
 def conteoDePeliculasPorGenero():
     df_conteo = FuncionesDeAgregacion.conteo_peliculas_por_genero("../Proyectomineria/recogiendo_tomates_2.csv")
@@ -23,7 +23,7 @@ def conteoDePeliculasPorGenero():
 
     plt.savefig('../Proyectomineria/graficas/'+'Conteo de Peliculas por Genero', bbox_inches='tight')
     # Mostrar el gráfico (opcional)
-    plt.show()
+    # plt.show()
 
 def graficaPuntuacionPromedioPorGenero():
     df_genero = FuncionesDeAgregacion.promedio_score_por_genero("../Proyectomineria/recogiendo_tomates_2.csv")
@@ -35,13 +35,13 @@ def graficaPuntuacionPromedioPorGenero():
     generos = df_genero['Genre']
 
     # Lo mismo con las puntuaciones de tomatometer y de la audiencia
-    promedios_tomatometer = df_genero['Tomatometer Score']
-    promedios_audience = df_genero['Audience Score']
+    promedios_tomatometer = df_genero['TomatometerScore']
+    promedios_audience = df_genero['AudienceScore']
 
     # Personalización de la grafica
     plt.figure(figsize=(12, 7))
-    plt.bar(generos, promedios_tomatometer, label='Tomatometer Score', alpha=0.7)
-    plt.bar(generos, promedios_audience, label='Audience Score', alpha=0.7)
+    plt.bar(generos, promedios_tomatometer, label='TomatometerScore', alpha=0.7)
+    plt.bar(generos, promedios_audience, label='AudienceScore', alpha=0.7)
     plt.xlabel('Género')
     plt.ylabel('Promedio de Puntuación (sobre 100)')
     plt.title('Promedio de Puntuaciones por Género y Tipo')
@@ -92,6 +92,11 @@ def conteoDePeliculasPorGeneroYClasificacion():
         # Se muestra el grafico (opcional)
         # plt.show()
 
+path = "../Proyectomineria/graficas"
+try:  
+    os.mkdir(path)  
+except OSError as error:  
+    print(error)  
 
 graficaPuntuacionPromedioPorGenero()
 conteoDePeliculasPorGenero()

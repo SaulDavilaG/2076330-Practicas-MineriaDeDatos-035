@@ -39,8 +39,8 @@ def renombrar_Columnas(input_file):
     # Se carga el archivo CSV
     df = pd.read_csv(input_file)
     # Se renombran todas las columnas
-    df.rename(columns={df.columns[0]: "Number", df.columns[1]: "Title", df.columns[2]: "Tomatometer Score", 
-                       df.columns[3]: "Audience Score", df.columns[4]: "Rating", df.columns[5]: "Genre",
+    df.rename(columns={df.columns[0]: "Number", df.columns[1]: "Title", df.columns[2]: "TomatometerScore", 
+                       df.columns[3]: "AudienceScore", df.columns[4]: "Rating", df.columns[5]: "Genre",
                        df.columns[6]: "Director", df.columns[7]: "Producer", df.columns[8]: "Writer",
                        df.columns[9]: "R. Date (Theaters)", df.columns[10]: "R. Date (Streaming)", df.columns[11]: "Runtime",
                        df.columns[12]: "Prod. Company"}, inplace = True)
@@ -99,8 +99,8 @@ def formato_A_Score(input_file):
     # Se carga el archivo CSV
     df = pd.read_csv(input_file)
     # Se guardan los datos de las puntuaciones en variables diferentes
-    columnaTomatometerScore = df['Tomatometer Score']
-    columnaAudienceScore = df['Audience Score']
+    columnaTomatometerScore = df['TomatometerScore']
+    columnaAudienceScore = df['AudienceScore']
     # Se itera a través de las listas/Arrays
     for i in range(len(columnaAudienceScore)):
         #Si el valor es no nulo, se le quita el signo de porcentaje
@@ -109,8 +109,8 @@ def formato_A_Score(input_file):
         #Lo mismo aquí, pero para el otro array de score
         if pd.notna(columnaAudienceScore[i]):
             columnaAudienceScore[i] = columnaAudienceScore[i][:-1]
-    df['Tomatometer Score'] = columnaTomatometerScore
-    df['Audience Score'] = columnaAudienceScore
+    df['TomatometerScore'] = columnaTomatometerScore
+    df['AudienceScore'] = columnaAudienceScore
     df.to_csv(input_file, index=False)
 
 def formato_A_Rating(input_file):
