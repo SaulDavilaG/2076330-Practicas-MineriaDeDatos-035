@@ -8,7 +8,7 @@ def euclidean_distance(punto1, punto2):
     punto2 = np.array(punto2)
     return np.sqrt(np.sum((punto1 - punto2) ** 2))
 
-distancia = euclidean_distance([1,2],[3,4])
+#distancia = euclidean_distance([1,2],[3,4])
 
 def k_nearest_neighbour(dfaux, punto):
     dfaux['Distance']=0

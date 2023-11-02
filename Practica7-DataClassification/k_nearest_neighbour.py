@@ -48,8 +48,9 @@ for clasificacion in color_mapping:
 
 punto_x=20
 punto_y=50
+genero= k_nearest_neighbour((punto_x,punto_y), X)
 
-plt.scatter(punto_x,punto_y, marker='x', c=color_mapping[k_nearest_neighbour((punto_x,punto_y), X)], label='Punto Nuevo', s=100)
+plt.scatter(punto_x,punto_y, marker='x', c='black', label= f'Punto Nuevo ({genero})', s=100)
 
 # Etiquetas de ejes
 plt.xlabel('TomatometerScore')
@@ -59,7 +60,7 @@ plt.ylabel('AudienceScore')
 plt.legend()
 
 # Título
-plt.title('Gráfica de Dispersión de TomatometerScore vs. AudienceScore con Clasificación K-NN')
+plt.title('Gráfica de Dispersión TomatometerScore vs. AudienceScore KNN')
 
-# Mostrar la gráfica
-plt.show()
+# Guardar la gráfica
+plt.savefig('../Proyectomineria/Practica7-DataClassification/'+'k_nearest_neighbour_1.png')
