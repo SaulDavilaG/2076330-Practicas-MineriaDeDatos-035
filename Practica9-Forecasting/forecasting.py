@@ -1,58 +1,60 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
-# Leer el dataset de películas (asegúrate de tener un archivo CSV válido)
-data = pd.read_csv('tu_archivo.csv')
+df = pd.read_csv('../Proyectomineria/recogiendo_tomates_2.csv')
+df = df.dropna(subset=['TomatometerScore', 'AudienceScore'])
 
-# Seleccionar las columnas de interés
-X = data['Runtime'].values
-y = data['TomatometerScore'].values
+X = df['TomatometerScore'].values
+y = df['AudienceScore'].values
 
-# Calcular las medias de X y y
-mean_x = np.mean(X)
+mean_X = np.mean(X)
 mean_y = np.mean(y)
 
-# Calcular los coeficientes de la regresión
-numerator = 0
-denominator = 0
-n = len(X)
+#Coeficientes de la regresión lineal
+numerador = np.sum((X - mean_X) * (y - mean_y))
+denominador = np.sum((X - mean_X)**2)
 
-for i in range(n):
-    numerator += (X[i] - mean_x) * (y[i] - mean_y)
-    denominator += (X[i] - mean_x) ** 2
+# Caso en que el denominador sea cero (evitar la indeterminación)
+if denominador != 0:
+    b1 = numerador / denominador
+    b0 = mean_y - b1 * mean_X
 
-b1 = numerator / denominator
-b0 = mean_y - (b1 * mean_x)
+    # Función de predicción
+    def predict(x):
+        return b0 + b1 * x
 
-# Imprimir los coeficientes
-print(f'Coeficiente b1 (pendiente): {b1}')
-print(f'Coeficiente b0 (intersección): {b0}')
+    # Predicciones
+    predicted_y = predict(X)
 
-# Realizar predicciones
-y_pred = b0 + b1 * X
+    # Imprimir los coeficientes y la precisión
+    print("Coeficiente b1:", b1)
+    print("Coeficiente b0:", b0)
 
-# Graficar las predicciones
-plt.scatter(X, y, color='blue', label='Datos reales')
-plt.plot(X, y_pred, color='red', label='Predicciones')
-plt.xlabel('Runtime')
-plt.ylabel('TomatometerScore')
-plt.legend()
-plt.show()
+    # Por ejemplo, para predecir AudienceScore para un nuevo valor de TomatometerScore
+    new_tomatometer_score = 75
+    predicted_audience_score = predict(new_tomatometer_score)
+    print(f"Predicción de AudienceScore para TomatometerScore {new_tomatometer_score}: {predicted_audience_score}")
 
-# Calcular el coeficiente de determinación R^2
-ssr = 0
-sst = 0
+    # Crear un rango de valores para TomatometerScore
+    x_range = np.linspace(min(X), max(X), 100)
 
-for i in range(n):
-    y_pred_i = b0 + b1 * X[i]
-    ssr += (y[i] - y_pred_i) ** 2
-    sst += (y[i] - mean_y) ** 2
+    # Calcular los valores predichos correspondientes a ese rango
+    y_pred = b0 + b1 * x_range
 
-r2 = 1 - (ssr / sst)
-print(f"Coeficiente de determinación R^2: {r2}")
+    plt.figure(figsize=(10, 6))
+    plt.scatter(X, y, label='Películas Puntuadas', color='black', s=10)
+    plt.plot(x_range, y_pred, label='Línea de Regresión', color='red')
 
-# Hacer predicciones para nuevas películas
-new_runtimes = np.array([120, 140])  # Ejemplos de duración de películas en minutos
-predicted_scores = b0 + b1 * new_runtimes
-print(f"Pronóstico de calificaciones para nuevas películas: {predicted_scores}")
+    # Etiquetas y título
+    plt.xlabel('TomatometerScore')
+    plt.ylabel('AudienceScore')
+    plt.title('Regresión Lineal TomatometerScore vs AudienceScore')
+
+    # Mostrar la leyenda
+    plt.legend()
+
+    # Mostrar la gráfica
+    plt.show()
+else:
+    print("El denominador es cero, por lo que no se puede calcular la regresión lineal")

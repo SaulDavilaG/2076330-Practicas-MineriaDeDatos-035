@@ -137,7 +137,7 @@ def categorizar_ratings(cadena):
 def eliminar_columnas(input_file):
     # Se carga el archivo CSV
     df = pd.read_csv(input_file)
-    df.drop(columns=['Director','Producer','Writer','Prod. Company'], inplace=True)
+    df.drop(columns=['Producer','Writer','Prod. Company'], inplace=True)
     df.to_csv(input_file, index=False)
 
 def formato_A_Generos(input_file):
